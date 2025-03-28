@@ -3,6 +3,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from matplotlib.font_manager import FontProperties
+import os
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # Global style configurations
 STYLE_CONFIG = {
@@ -11,28 +18,28 @@ STYLE_CONFIG = {
     "text_color": "#2F4F4F",
     "grid_color": "#666666",
     "spine_color": "#666666",
-    # Font sizes
-    "title_size": 36,
-    "axis_label_size": 20,
-    "tick_label_size": 16,
-    "annotation_size": 18,
+    # Font sizes - Increased for better mobile visibility
+    "title_size": 48,  # Increased from 36
+    "axis_label_size": 32,  # Increased from 20
+    "tick_label_size": 24,  # Increased from 16
+    "annotation_size": 28,  # Increased from 18
     # Font weights
     "title_weight": "bold",
     "label_weight": "bold",
     "annotation_weight": "bold",
     # Line properties
-    "spine_width": 1.5,
-    "grid_alpha": 0.2,
-    "line_alpha": 0.8,
-    "line_width": 2.5,
+    "spine_width": 2.0,  # Increased from 1.5
+    "grid_alpha": 0.15,  # Reduced from 0.2 for cleaner look
+    "line_alpha": 0.9,  # Increased from 0.8
+    "line_width": 3.0,  # Increased from 2.5
     # Spacing
-    "title_pad": 30,
-    "annotation_pad": 5,
+    "title_pad": 40,  # Increased from 30
+    "annotation_pad": 8,  # Increased from 5
     # Bar properties
-    "bar_height": 0.9,
-    "bar_alpha": 0.8,
-    # Figure size
-    "figure_size": (14, 18),
+    "bar_height": 1.0,  # Increased from 0.9
+    "bar_alpha": 0.85,  # Increased from 0.8
+    # Figure size - Changed to 9:16 aspect ratio for mobile
+    "figure_size": (9, 16),  # Changed from (14, 18)
 }
 
 # Score threshold configurations
@@ -54,6 +61,9 @@ def calculate_percentile_score(df, percentile):
 def create_score_distribution_plot(data_path, output_path):
     # Read the data
     df = pd.read_csv(data_path)
+
+    # Ensure output directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     # Process the score range data
     def extract_score(score_range):
@@ -80,8 +90,10 @@ def create_score_distribution_plot(data_path, output_path):
     # Create the symmetric distribution plot
     max_count = df["人数"].max()
 
-    # Create custom color gradients (purple-blue color scheme)
-    colors = plt.cm.RdPu(np.linspace(0.2, 0.7, len(df)))
+    # Create custom color gradients with more vibrant colors
+    colors = plt.cm.RdPu(
+        np.linspace(0.1, 0.8, len(df))
+    )  # Adjusted color range for more vibrancy
 
     # Plot bars with enhanced visual effect
     bars_right = plt.barh(
@@ -101,29 +113,38 @@ def create_score_distribution_plot(data_path, output_path):
         edgecolor="none",
     )
 
-    # Add title with custom style
+    # Add title with custom style and increased emphasis
     plt.title(
         "高考分数分布图",
         fontsize=STYLE_CONFIG["title_size"],
         pad=STYLE_CONFIG["title_pad"],
         color=STYLE_CONFIG["text_color"],
         fontweight=STYLE_CONFIG["title_weight"],
+        bbox=dict(
+            facecolor=STYLE_CONFIG["background_color"],
+            edgecolor="none",
+            alpha=0.8,
+            pad=10,
+        ),
     )
 
+    # Adjust axis labels with more emphasis
     plt.xlabel(
         "人数",
         fontsize=STYLE_CONFIG["axis_label_size"],
         color=STYLE_CONFIG["text_color"],
         fontweight=STYLE_CONFIG["label_weight"],
+        labelpad=20,
     )
     plt.ylabel(
         "分数",
         fontsize=STYLE_CONFIG["axis_label_size"],
         color=STYLE_CONFIG["text_color"],
         fontweight=STYLE_CONFIG["label_weight"],
+        labelpad=20,
     )
 
-    # Add score lines with enhanced style
+    # Add score lines with enhanced style and visibility
     for score, label, color in SCORE_THRESHOLDS:
         plt.axhline(
             y=score,
@@ -133,7 +154,7 @@ def create_score_distribution_plot(data_path, output_path):
             linewidth=STYLE_CONFIG["line_width"],
         )
         plt.text(
-            max_count * 0.82,
+            max_count * 0.85,  # Adjusted position for better visibility
             score,
             f"{label} ({score})",
             fontsize=STYLE_CONFIG["annotation_size"],
@@ -141,15 +162,16 @@ def create_score_distribution_plot(data_path, output_path):
             color=color,
             bbox=dict(
                 facecolor=STYLE_CONFIG["background_color"],
-                edgecolor="none",
-                alpha=STYLE_CONFIG["line_alpha"],
+                edgecolor=color,
+                alpha=0.9,
                 pad=STYLE_CONFIG["annotation_pad"],
+                linewidth=2,
             ),
         )
 
-    # Add median score
+    # Add median score with enhanced visibility
     plt.text(
-        -max_count * 1.15,
+        -max_count * 1.2,
         median_score,
         f"中位数: {median_score}",
         fontsize=STYLE_CONFIG["annotation_size"],
@@ -157,14 +179,15 @@ def create_score_distribution_plot(data_path, output_path):
         color=STYLE_CONFIG["text_color"],
         bbox=dict(
             facecolor=STYLE_CONFIG["background_color"],
-            edgecolor="none",
-            alpha=STYLE_CONFIG["line_alpha"],
+            edgecolor=STYLE_CONFIG["text_color"],
+            alpha=0.9,
             pad=STYLE_CONFIG["annotation_pad"],
+            linewidth=2,
         ),
     )
 
-    # Adjust the axis
-    plt.xlim(-max_count * 1.2, max_count * 1.2)
+    # Adjust the axis with more padding
+    plt.xlim(-max_count * 1.3, max_count * 1.3)  # Increased padding
 
     # Remove spines and customize remaining ones
     plt.gca().spines["top"].set_visible(False)
@@ -183,14 +206,15 @@ def create_score_distribution_plot(data_path, output_path):
         linestyle=":",
     )
 
-    # Customize tick labels with larger font
+    # Customize tick labels with larger font and more spacing
     plt.gca().set_xticks([-max_count, -max_count // 2, 0, max_count // 2, max_count])
     plt.gca().set_xticklabels([max_count, max_count // 2, 0, max_count // 2, max_count])
     plt.tick_params(
         colors=STYLE_CONFIG["text_color"],
         labelsize=STYLE_CONFIG["tick_label_size"],
         width=STYLE_CONFIG["spine_width"],
-        length=6,
+        length=8,  # Increased tick length
+        pad=10,  # Added padding
     )
 
     # Save the plot with higher quality
@@ -203,8 +227,11 @@ def create_score_distribution_plot(data_path, output_path):
     )
     plt.close()
 
+    # Log the output file path
+    logging.info(f"Score distribution plot saved to: {os.path.abspath(output_path)}")
+
 
 if __name__ == "__main__":
     data_path = "data/processed/四川省204年高考一分一段表公布.csv"
-    output_path = "output/figures/score_distribution.png"
+    output_path = "output/visualizations/高考分数分布图.png"
     create_score_distribution_plot(data_path, output_path)
