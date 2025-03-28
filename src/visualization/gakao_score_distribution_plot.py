@@ -92,9 +92,9 @@ def create_score_distribution_plot(data_path, output_path):
     max_count = df["人数"].max()
 
     # Create custom color gradients with more vibrant colors
-    colors = plt.cm.RdPu(
-        np.linspace(0.1, 0.8, len(df))
-    )  # Adjusted color range for more vibrancy
+    colors = plt.cm.RdPu(np.linspace(0.1, 0.8, len(df)))[
+        ::-1
+    ]  # Reversed gradient for top-to-bottom dark-to-light effect
 
     # Plot bars with enhanced visual effect
     bars_right = plt.barh(
