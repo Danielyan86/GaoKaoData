@@ -18,28 +18,30 @@ STYLE_CONFIG = {
     "text_color": "#2F4F4F",
     "grid_color": "#666666",
     "spine_color": "#666666",
-    # Font sizes - Increased for better mobile visibility
-    "title_size": 48,  # Increased from 36
-    "axis_label_size": 32,  # Increased from 20
-    "tick_label_size": 24,  # Increased from 16
-    "annotation_size": 28,  # Increased from 18
+    # Font sizes - Adjusted for compact display
+    "title_size": 48,
+    "axis_label_size": 32,
+    "tick_label_size": 24,
+    "annotation_size": 24,  # Reduced for more compact labels
     # Font weights
     "title_weight": "bold",
     "label_weight": "bold",
     "annotation_weight": "bold",
     # Line properties
-    "spine_width": 2.0,  # Increased from 1.5
-    "grid_alpha": 0.15,  # Reduced from 0.2 for cleaner look
-    "line_alpha": 0.9,  # Increased from 0.8
-    "line_width": 3.0,  # Increased from 2.5
+    "spine_width": 2.0,
+    "grid_alpha": 0.15,
+    "line_alpha": 0.9,
+    "line_width": 2.0,
     # Spacing
-    "title_pad": 40,  # Increased from 30
-    "annotation_pad": 8,  # Increased from 5
+    "title_pad": 40,
+    "annotation_pad": 4,  # Reduced padding for more compact labels
     # Bar properties
-    "bar_height": 1.0,  # Increased from 0.9
-    "bar_alpha": 0.85,  # Increased from 0.8
+    "bar_height": 1.0,
+    "bar_alpha": 0.85,
     # Figure size - Changed to 9:16 aspect ratio for mobile
-    "figure_size": (9, 16),  # Changed from (14, 18)
+    "figure_size": (9, 16),
+    # Text offset
+    "text_y_offset": 5,  # New: control text position above lines
 }
 
 # Score threshold configurations
@@ -152,50 +154,62 @@ def create_score_distribution_plot(data_path, output_path):
             linestyle="--",
             alpha=STYLE_CONFIG["line_alpha"],
             linewidth=STYLE_CONFIG["line_width"],
+            zorder=2,  # Ensure lines are above the grid
         )
+        # Position text above the line
         plt.text(
-            max_count * 0.85,  # Adjusted position for better visibility
-            score,
-            f"{label} ({score})",
+            max_count * 0.85,
+            score + STYLE_CONFIG["text_y_offset"],  # Use consistent offset
+            f"{label}",
             fontsize=STYLE_CONFIG["annotation_size"],
             fontweight=STYLE_CONFIG["annotation_weight"],
             color=color,
             bbox=dict(
                 facecolor=STYLE_CONFIG["background_color"],
                 edgecolor=color,
-                alpha=0.9,
+                alpha=0.95,
                 pad=STYLE_CONFIG["annotation_pad"],
-                linewidth=2,
+                linewidth=1.5,
+                boxstyle="round,pad=0.5",
             ),
+            verticalalignment="bottom",
+            zorder=3,  # Ensure text is above everything
         )
 
-    # Add median score with enhanced visibility
+    # Add median line and score with enhanced visibility
+    plt.axhline(
+        y=median_score,
+        color=STYLE_CONFIG["text_color"],
+        linestyle="--",
+        alpha=STYLE_CONFIG["line_alpha"],
+        linewidth=STYLE_CONFIG["line_width"],
+        zorder=2,
+    )
     plt.text(
         -max_count * 1.2,
-        median_score,
-        f"中位数: {median_score}",
+        median_score + STYLE_CONFIG["text_y_offset"],  # Use consistent offset
+        f"中位数",
         fontsize=STYLE_CONFIG["annotation_size"],
         fontweight=STYLE_CONFIG["annotation_weight"],
         color=STYLE_CONFIG["text_color"],
         bbox=dict(
             facecolor=STYLE_CONFIG["background_color"],
             edgecolor=STYLE_CONFIG["text_color"],
-            alpha=0.9,
+            alpha=0.95,
             pad=STYLE_CONFIG["annotation_pad"],
-            linewidth=2,
+            linewidth=1.5,
+            boxstyle="round,pad=0.5",
         ),
+        verticalalignment="bottom",
+        zorder=3,
     )
 
     # Adjust the axis with more padding
-    plt.xlim(-max_count * 1.3, max_count * 1.3)  # Increased padding
+    plt.xlim(-max_count * 1.3, max_count * 1.3)
 
-    # Remove spines and customize remaining ones
-    plt.gca().spines["top"].set_visible(False)
-    plt.gca().spines["right"].set_visible(False)
-    plt.gca().spines["left"].set_color(STYLE_CONFIG["spine_color"])
-    plt.gca().spines["bottom"].set_color(STYLE_CONFIG["spine_color"])
-    plt.gca().spines["left"].set_linewidth(STYLE_CONFIG["spine_width"])
-    plt.gca().spines["bottom"].set_linewidth(STYLE_CONFIG["spine_width"])
+    # Remove all spines
+    for spine in plt.gca().spines.values():
+        spine.set_visible(False)
 
     # Add subtle grid
     plt.grid(
@@ -204,6 +218,7 @@ def create_score_distribution_plot(data_path, output_path):
         alpha=STYLE_CONFIG["grid_alpha"],
         color=STYLE_CONFIG["grid_color"],
         linestyle=":",
+        zorder=1,  # Ensure grid is at the bottom
     )
 
     # Customize tick labels with larger font and more spacing
@@ -212,9 +227,9 @@ def create_score_distribution_plot(data_path, output_path):
     plt.tick_params(
         colors=STYLE_CONFIG["text_color"],
         labelsize=STYLE_CONFIG["tick_label_size"],
-        width=STYLE_CONFIG["spine_width"],
-        length=8,  # Increased tick length
-        pad=10,  # Added padding
+        width=0,  # Remove tick marks
+        length=0,  # Remove tick marks
+        pad=10,
     )
 
     # Save the plot with higher quality
