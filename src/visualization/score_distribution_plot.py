@@ -47,7 +47,6 @@ STYLE_CONFIG = {
 # Score threshold configurations
 SCORE_THRESHOLDS = [
     (539, "本科第一批", "#FF6B6B"),
-    (495, "本科线", "#FF8F00"),
     (459, "本科第二批", "#4CAF50"),
     (150, "专科批", "#2196F3"),
 ]
