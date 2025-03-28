@@ -1,70 +1,63 @@
-# GaoKao Data Analysis Project
+# GaoKaoData - Data Visualization Analysis Project
 
-This project is designed for analyzing and visualizing Gaokao (Chinese College Entrance Examination) data.
+A Python-based data visualization project that automatically generates various statistical charts from structured data sources.
 
 ## Project Structure
 
 ```
-GaoKaoData/
-├── data/                    # Data directory
-│   ├── raw/                # Original data files (CSV, Excel, HTML, etc.)
-│   └── processed/          # Processed and cleaned data files
-├── src/                    # Source code
-│   ├── data_processing/    # Data processing scripts
-│   └── visualization/      # Visualization scripts
-├── output/                 # Output files
-│   ├── figures/           # Generated charts and graphs
-│   └── reports/           # Analysis reports
-├── docs/                   # Documentation
-├── tests/                  # Test files
-└── requirements.txt        # Project dependencies
+/project-root
+├── data/               # Raw data files (CSV, Excel, etc.)
+│   ├── raw/           # Original data files
+│   └── processed/     # Preprocessed data files
+├── docs/              # Project documentation
+│   ├── requirements.md
+│   └── api/          # API documentation
+├── output/            # Generated visualization outputs
+│   ├── daily/        # Daily analysis charts
+│   ├── trends/       # Trend summary charts
+│   └── reports/      # Generated reports
+├── src/               # Source code
+│   ├── data/         # Data processing modules
+│   ├── visualization/ # Chart generation modules
+│   ├── utils/        # Utility functions
+│   └── config/       # Configuration files
+├── tests/             # Test files
+├── requirements.txt   # Python dependencies
+└── README.md         # Project documentation
 ```
 
-## Directory Descriptions
+## Features
 
-- `data/raw/`: Contains original data files in various formats (CSV, Excel, HTML, etc.)
-- `data/processed/`: Contains cleaned and processed data files ready for analysis
-- `src/data_processing/`: Contains scripts for data cleaning, transformation, and processing
-- `src/visualization/`: Contains scripts for generating charts and visualizations
-- `output/figures/`: Stores generated charts, graphs, and visualizations
-- `output/reports/`: Contains analysis reports and documentation
-- `docs/`: Project documentation, including usage guides and API references
-- `tests/`: Unit tests and test data
+- Automatic CSV and other structured data format parsing
+- Intelligent chart type recommendation based on data characteristics
+- Support for multiple chart types:
+  - Bar and column charts
+  - Line and area charts
+  - Pie and donut charts
+  - Scatter plots and heatmaps
+  - Box plots for distribution analysis
+- Chinese language support for all chart elements
+- Batch processing capabilities
+- Customizable chart styles
+- High-quality output formats (PNG, SVG, HTML)
 
-## Setup and Installation
+## Setup
 
-1. Create a virtual environment:
-
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
+1. Clone the repository
 2. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Configure your environment variables if needed
 
 ## Usage
 
-1. Place your raw data files in the `data/raw/` directory
-2. Run data processing scripts from `src/data_processing/`
-3. Generate visualizations using scripts from `src/visualization/`
-4. Find generated outputs in the `output/` directory
-
-## Dependencies
-
-- pandas: Data manipulation and analysis
-- matplotlib: Basic plotting
-- seaborn: Statistical visualizations
-- plotly: Interactive visualizations
-- jupyter: Interactive notebooks for analysis
+[Usage instructions will be added here]
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+[Contribution guidelines will be added here]
+
+## License
+
+[License information will be added here]
